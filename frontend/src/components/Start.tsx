@@ -1,18 +1,24 @@
 import React, { SetStateAction, Dispatch } from "react";
 import getAll from '../services/questions';
+import { Questions } from "../types";
 
 
-interface Props {
+interface StartProps {
     category: string;
     difficulty: string;
+    playPressed: boolean;
     setCategory: Dispatch<SetStateAction<string>>;
     setDifficulty: Dispatch<SetStateAction<string>>;
+    setQuestions: Dispatch<SetStateAction<Questions[]>>;
+    setPlayPressed: Dispatch<SetStateAction<boolean>>;
 }
 
-const Start = ({category, difficulty, setCategory, setDifficulty}: Props) => {
+const Start = ({category, difficulty, playPressed, setCategory, setDifficulty, setQuestions, setPlayPressed}: StartProps) => {
 
-    const handlePlay = (): void => {
-        getAll(category, difficulty);
+    const handlePlay = async (): Promise<void> => {
+      const getQuestions = await getAll(category, difficulty);
+      setQuestions(getQuestions);
+      setPlayPressed(!playPressed);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -41,16 +47,16 @@ const Start = ({category, difficulty, setCategory, setDifficulty}: Props) => {
         <label htmlFor="QuizCategory">Select Your Quiz Category:</label>
         <select name='QuizCategory' onChange={handleChange}>
         <option value="">--Please choose an option--</option>
-        <option value="Arts & Literature">Arts & Literature</option>
-        <option value="Film & TV">Film & TV</option>
-        <option value="Food & Drink">Food & Drink</option>
-        <option value="General Knowledge">General Knowledge</option>
-        <option value="Geography">Geography</option>
-        <option value="History">History</option>
-        <option value="Music">Music</option>
-        <option value="Science">Science</option>
-        <option value="Society & Culture">Society & Culture</option>
-        <option value="Sport & Leisure">Sport & Leisure</option>
+        <option value="arts_and_literature">Arts & Literature</option>
+        <option value="film_and_tv">Film & TV</option>
+        <option value="food_and_drink">Food & Drink</option>
+        <option value="general_knowledge">General Knowledge</option>
+        <option value="geography">Geography</option>
+        <option value="history">History</option>
+        <option value="music">Music</option>
+        <option value="science">Science</option>
+        <option value="society_and_culture">Society & Culture</option>
+        <option value="sport_and_leisure">Sport & Leisure</option>
         </select>
         </fieldset>
         </div>
