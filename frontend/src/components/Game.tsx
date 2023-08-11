@@ -1,24 +1,25 @@
-import React, { SetStateAction, Dispatch} from "react";
+import React, {useState, memo, Dispatch, SetStateAction} from "react";
 import { Questions } from "../types";
-import Timer from "./Timer";
 import nextId from "react-id-generator";
 
 
 
 interface GameProps {
     questions: Questions[];
-    currentQuestion: number;
-    setCurrentQuestion: Dispatch<SetStateAction<number>>;
     score: number;
     setScore: Dispatch<SetStateAction<number>>;
-    display: string;
-    setDisplay: Dispatch<SetStateAction<string>>;
 }
 
-const Game = ({questions, currentQuestion, setCurrentQuestion, score, setScore, display, setDisplay }: GameProps) => {
+const Game = ({questions, score, setScore}: GameProps) => {
 
-//combine 'correct answer' and 'incorrect answers' into an array and sort it randomly
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [display, setDisplay] = useState('');
+    
+
+    //combine 'correct answer' and 'incorrect answers' into an array and sort it randomly
     const mergeQuestions = [...questions[currentQuestion]?.incorrectAnswers || [],  ...(questions[currentQuestion]?.correctAnswer ? [questions[currentQuestion].correctAnswer] : [])].sort(() => Math.random() - 0.5);
+
+    
 
     const updateScore = (answer: string): void => {
         setScore(prev => prev + 1);
@@ -37,7 +38,7 @@ const Game = ({questions, currentQuestion, setCurrentQuestion, score, setScore, 
         e.preventDefault();
         e.currentTarget.value === questions[currentQuestion].correctAnswer ? updateScore(e.currentTarget.value) :
         wrongAnswer(e.currentTarget.value);
-        currentQuestion < (questions.length - 1) ? setCurrentQuestion(++currentQuestion) : console.log('test done!');  
+        currentQuestion < (questions.length - 1) ? setCurrentQuestion(prev => prev + 1) : console.log('test done!');  
     }
 
     const clearDisplay = () => {
@@ -48,12 +49,11 @@ const Game = ({questions, currentQuestion, setCurrentQuestion, score, setScore, 
   
 
     return (
-        //if questions retrieved from api
-        //develop game screen below which will show when 'play now' pressed
+     
         <>
         <div className="game-container">
         <p className="category">Category: History</p>
-        <Timer/>
+
         <p>Score: {score}</p>
         <h3>{display}</h3>
         <p className="question-display">{questions[currentQuestion]?.question.text}</p>
@@ -73,10 +73,9 @@ const Game = ({questions, currentQuestion, setCurrentQuestion, score, setScore, 
          
 
         </div>
-        
         </>
     )
 }
 
 
-export default Game;
+export default memo(Game);

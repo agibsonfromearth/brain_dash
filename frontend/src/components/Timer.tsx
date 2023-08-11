@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react"
+import {useEffect, Dispatch, SetStateAction} from "react"
 
+interface TimerProps {
+    time: number;
+    setTime:  Dispatch<SetStateAction<number>>;
+   
+}
 
-
-const Timer = () => {
-    // move this up into App.tsx
-    const [time, setTime] = useState(30)
+const Timer = ({time, setTime}: TimerProps) => {
+  
+      
 
     useEffect(() => {
         const interval = setInterval(() => {
             setTime((prev) => {
                 if (prev === 1) {
-                    console.log('times up');
                     clearInterval(interval);
+                    console.log('time expired');
                 }
                 return prev - 1;
             });

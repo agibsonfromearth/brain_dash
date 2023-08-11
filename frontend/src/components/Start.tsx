@@ -1,19 +1,19 @@
-import React, { SetStateAction, Dispatch } from "react";
+import React, {useState, SetStateAction, Dispatch } from "react";
 import getAll from '../services/questions';
 import { Questions } from "../types";
 
 
 interface StartProps {
-    category: string;
-    difficulty: string;
+
     playPressed: boolean;
-    setCategory: Dispatch<SetStateAction<string>>;
-    setDifficulty: Dispatch<SetStateAction<string>>;
     setQuestions: Dispatch<SetStateAction<Questions[]>>;
     setPlayPressed: Dispatch<SetStateAction<boolean>>;
 }
 
-const Start = ({category, difficulty, playPressed, setCategory, setDifficulty, setQuestions, setPlayPressed}: StartProps) => {
+const Start = ({playPressed, setQuestions, setPlayPressed}: StartProps) => {
+
+    const [category, setCategory] = useState('');
+    const [difficulty, setDifficulty] = useState('');
 
     const handlePlay = async (): Promise<void> => {
       const getQuestions = await getAll(category, difficulty);
