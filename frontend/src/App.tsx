@@ -18,6 +18,8 @@ function App() {
     if (time === 0) {
       setTimeExpired(true);
     }
+
+   
   }, [time]);
 
 
@@ -27,7 +29,10 @@ function App() {
       
       {timeExpired ? 
         <GameOver
-        score={score} 
+          score={score}
+          setPlayPressed={setPlayPressed}
+          setTimeExpired={setTimeExpired}
+          setTime={setTime} 
         />
       : playPressed ? (
         <>
